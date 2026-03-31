@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Puzzle Game Hub</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <!-- Sound Effects -->
+    <audio id="sound-click" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3"></audio>
+    <audio id="sound-win" src="https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3"></audio>
+    <audio id="sound-lose" src="https://assets.mixkit.co/active_storage/sfx/2003/2003-preview.mp3"></audio>
+    <audio id="sound-flip" src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3"></audio>
+    <audio id="sound-slide" src="https://assets.mixkit.co/active_storage/sfx/2570/2570-preview.mp3"></audio>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fas fa-puzzle-piece"></i>
+            <span>PuzzleHub</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#" data-target="home" class="nav-link active">Home</a></li>
+            <li><a href="#" data-target="game-number" class="nav-link">Number Guess</a></li>
+            <li><a href="#" data-target="game-memory" class="nav-link">Memory Match</a></li>
+            <li><a href="#" data-target="game-sliding" class="nav-link">Sliding Puzzle</a></li>
+            <li><a href="#" data-target="leaderboard" class="nav-link">Leaderboard</a></li>
+        </ul>
+        <div class="nav-controls">
+            <button id="theme-toggle" class="icon-btn" aria-label="Toggle Dark Mode">
+                <i class="fas fa-moon"></i>
+            </button>
+            <div class="hamburger">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container">
+
+        <!-- ================= HOME SECTION ================= -->
+        <section id="home" class="page active">
+            <div class="hero">
+                <h1 class="animate-text">Welcome to Puzzle Game Hub</h1>
+                <p class="subtitle animate-text delay-1">Challenge your mind with our interactive collection of puzzles!
+                </p>
+            </div>
+
+            <div class="game-cards">
+                <div class="card glass-panel" data-target="game-number">
+                    <div class="card-icon"><i class="fas fa-sort-numeric-up"></i></div>
+                    <h3>Number Guess</h3>
+                    <p>Test your intuition by guessing the hidden number within the attempts.</p>
+                    <button class="btn primary-btn">Play Now</button>
+                </div>
+                <div class="card glass-panel" data-target="game-memory">
+                    <div class="card-icon"><i class="fas fa-clone"></i></div>
+                    <h3>Memory Match</h3>
+                    <p>Find all matching pairs of cards before the timer runs out.</p>
+                    <button class="btn primary-btn">Play Now</button>
+                </div>
+                <div class="card glass-panel" data-target="game-sliding">
+                    <div class="card-icon"><i class="fas fa-th-large"></i></div>
+                    <h3>Sliding Puzzle</h3>
+                    <p>Reorder the mixed tiles to form the complete picture.</p>
+                    <button class="btn primary-btn">Play Now</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= NUMBER GUESSING GAME ================= -->
+        <section id="game-number" class="page">
+            <div class="game-container glass-panel">
+                <div class="game-header">
+                    <h2><i class="fas fa-sort-numeric-up"></i> Number Guessing</h2>
+                    <div class="badges">
+                        <span class="badge" id="num-diff-badge">Medium</span>
+                        <span class="badge"><i class="fas fa-heart"></i> <span id="num-lives">5</span></span>
+                    </div>
+                </div>
+
+                <div class="settings-panel">
+                    <label>Difficulty:</label>
+                    <select id="num-difficulty" class="styled-select">
+                        <option value="easy">Easy (1-50, 10 lives)</option>
+                        <option value="medium" selected>Medium (1-100, 7 lives)</option>
+                        <option value="hard">Hard (1-200, 5 lives)</option>
+                    </select>
+                </div>
+
+                <div class="game-board text-center">
+                    <p class="game-instruction">Guess a number between <span id="num-range">1 and 100</span></p>
+
+                    <div class="input-group">
+                        <input type="number" id="num-input" placeholder="Enter your guess" min="1" max="100">
+                        <button id="num-guess-btn" class="btn primary-btn pulse-anim">Guess</button>
+                    </div>
+
+                    <div class="message-box" id="num-message">
+                        Make your first guess!
+                    </div>
+
+                    <div class="history-box">
+                        <p>Previous Guesses: <span id="num-history">None</span></p>
+                    </div>
+                </div>
+
+                <div class="game-controls">
+                    <button id="num-restart-btn" class="btn secondary-btn"><i class="fas fa-redo"></i> Restart</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= MEMORY MATCH GAME ================= -->
+        <section id="game-memory" class="page">
+            <div class="game-container glass-panel">
+                <div class="game-header">
+                    <h2><i class="fas fa-clone"></i> Memory Match</h2>
+                    <div class="stats-row">
+                        <div class="stat"><i class="fas fa-stopwatch"></i> <span class="timer-display"
+                                id="mem-timer">00:00</span></div>
+                        <div class="stat"><i class="fas fa-shoe-prints"></i> Moves: <span id="mem-moves">0</span></div>
+                    </div>
+                </div>
+
+                <div class="settings-panel">
+                    <label>Difficulty:</label>
+                    <select id="mem-difficulty" class="styled-select">
+                        <option value="easy">Easy (4x3)</option>
+                        <option value="medium" selected>Medium (4x4)</option>
+                        <option value="hard">Hard (5x4)</option>
+                    </select>
+                </div>
+
+                <div class="message-box hidden" id="mem-message"></div>
+
+                <div class="memory-board" id="mem-board">
+                    <!-- Cards generated by JS -->
+                </div>
+
+                <div class="game-controls">
+                    <button id="mem-restart-btn" class="btn secondary-btn"><i class="fas fa-redo"></i> Restart</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= SLIDING PUZZLE GAME ================= -->
+        <section id="game-sliding" class="page">
+            <div class="game-container glass-panel">
+                <div class="game-header">
+                    <h2><i class="fas fa-th-large"></i> Sliding Puzzle</h2>
+                    <div class="stats-row">
+                        <div class="stat"><i class="fas fa-stopwatch"></i> <span class="timer-display"
+                                id="slide-timer">00:00</span></div>
+                        <div class="stat"><i class="fas fa-shoe-prints"></i> Moves: <span id="slide-moves">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-panel flex-between">
+                    <div>
+                        <label>Grid Size:</label>
+                        <select id="slide-difficulty" class="styled-select">
+                            <option value="3">3x3 (Easy)</option>
+                            <option value="4" selected>4x4 (Medium)</option>
+                            <option value="5">5x5 (Hard)</option>
+                        </select>
+                    </div>
+                    <button id="slide-solve-btn" class="btn accent-btn" style="display: none;"><i
+                            class="fas fa-magic"></i> Auto Solve</button>
+                </div>
+
+                <div class="message-box hidden" id="slide-message"></div>
+
+                <div class="slide-board-container">
+                    <div class="slide-board" id="slide-board">
+                        <!-- Tiles generated by JS -->
+                    </div>
+                </div>
+
+                <div class="game-controls">
+                    <button id="slide-restart-btn" class="btn secondary-btn"><i class="fas fa-redo"></i> Shuffle &
+                        Restart</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= LEADERBOARD ================= -->
+        <section id="leaderboard" class="page">
+            <div class="leaderboard-container glass-panel">
+                <h2><i class="fas fa-trophy"></i> High Scores</h2>
+
+                <div class="tabs">
+                    <button class="tab-btn active" data-tab="lb-number">Number Guess</button>
+                    <button class="tab-btn" data-tab="lb-memory">Memory Match</button>
+                    <button class="tab-btn" data-tab="lb-sliding">Sliding Puzzle</button>
+                </div>
+
+                <div class="tab-content active" id="lb-number">
+                    <table class="styled-table">
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>Difficulty</th>
+                                <th>Attempts</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody id="lb-body-number">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="tab-content" id="lb-memory">
+                    <table class="styled-table">
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>Difficulty</th>
+                                <th>Time</th>
+                                <th>Moves</th>
+                            </tr>
+                        </thead>
+                        <tbody id="lb-body-memory">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="tab-content" id="lb-sliding">
+                    <table class="styled-table">
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>Grid Size</th>
+                                <th>Time</th>
+                                <th>Moves</th>
+                            </tr>
+                        </thead>
+                        <tbody id="lb-body-sliding">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="text-center mt-3">
+                    <button id="clear-data-btn" class="btn danger-btn"><i class="fas fa-trash-alt"></i> Clear
+                        Data</button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>&copy; 2026 PuzzleHub. Crafted with <i class="fas fa-heart" style="color: #ff4757;"></i> for puzzle lovers.
+        </p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
